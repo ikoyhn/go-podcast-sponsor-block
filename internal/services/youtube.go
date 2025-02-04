@@ -107,10 +107,16 @@ func GetYoutubeVideo(youtubeVideoId string) (string, <-chan struct{}) {
 	youtubeVideoId = strings.TrimSuffix(youtubeVideoId, ".m4a")
 	ytdlp.Install(context.TODO(), nil)
 
+	categories := os.Getenv("SPONSORBLOCK_CATEGORIES")
+	if categories == "" {
+		categories = "sponsor"
+	}
+	strings.trimSpace(categories)
+
 	dl := ytdlp.New().
 		NoProgress().
 		FormatSort("ext::m4a").
-		SponsorblockRemove("sponsor").
+		SponsorblockRemove(categories).
 		ExtractAudio().
 		NoPlaylist().
 		FFmpegLocation("/usr/bin/ffmpeg").

@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"os"
+	"strings"
 
 	log "github.com/labstack/gommon/log"
 )
@@ -12,7 +14,15 @@ const SPONSORBLOCK_API_URL = "https://sponsor.ajay.app/api/skipSegments?videoID=
 
 func TotalSponsorTimeSkipped(youtubeVideoId string) float64 {
 	log.Debug("[SponsorBlock] Looking up podcast in SponsorBlock API...")
-	resp, err := http.Get(SPONSORBLOCK_API_URL + youtubeVideoId)
+	endURL := SPONSORBLOCK_API_URL + youtubeVideoId
+	
+	if categories := getCategories(); categories != nil {
+		for _, category := range categories {
+			endURL += "&category=" + strings.TrimSpace(category)
+		}
+	}
+
+	resp, err := http.Get(endURL)
 	if err != nil {
 		log.Error(err)
 		return 0
@@ -68,6 +78,14 @@ func calculateSkippedTime(segments []SponsorBlockResponse) float64 {
 	}
 
 	return skippedTime
+}
+
+func getCategories() []string {
+	categories := os.Getenv("SPONSORBLOCK_CATEGORIES")
+	if categories == "" {
+		return nil
+	}
+	return strings.Split(categories, ",")
 }
 
 type SponsorBlockResponse struct {

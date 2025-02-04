@@ -19,6 +19,7 @@ This app uses the following
 | `-e TOKEN=<secure key>` | Used for securing the endpoints. If using this you must add the query param `token` to the end of the URL for the `/rss` endpoint request ex.`?token=mySecureToken` | No |
 | `-e TRUSTED_HOSTS=<list of hosts>` | If you want to limit what host this service can be called from. Can be a list of hosts separated by a `,` Ex: `localhost:8080,https://podcast.com` | No |
 | `-e CRON` | By default a cron job will be run weekly to delete any podcast episode files that havent been access in over a week, if you want to modify when this runs you can set the cron here | No |
+| `-e SPONSORBLOCK_CATEGORIES` | Customize the categories that you would like to remove from your podcasts. String separated by `,` with possible values `sponsor,selfpromo,interaction,intro,outro,preview,music_offtopic,filler`. Default: `sponsor` | No |
 
 ## Docker Run Command Templates
 > Docker run command (only required parameters)
@@ -27,7 +28,7 @@ This app uses the following
     
 > Docker run command (all parameters)
 
-    docker run -p 8080:8080 -e GOOGLE_API_KEY=<api key here> -v /<audio download path here>:/config -e TRUSTED_HOSTS=<add hosts here> -e TOKEN=<add secure token here> -e CRON="0 0 * * 0"  ikoyhn/go-podcast-sponsor-block
+    docker run -p 8080:8080 -e GOOGLE_API_KEY=<api key here> -v /<audio download path here>:/config -e TRUSTED_HOSTS=<add hosts here> -e TOKEN=<add secure token here> -e CRON="0 0 * * 0" -e SPONSORBLOCK_CATEGORIES="sponsor" ikoyhn/go-podcast-sponsor-block
 
 
   
