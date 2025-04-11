@@ -120,7 +120,7 @@ func getChannelData(channelIdentifier string, service *youtube.Service, isPlayli
 		}
 
 		dbPodcast = &models.Podcast{
-			Id:              channel.Id,
+			Id:              channelIdentifier,
 			PodcastName:     channel.Snippet.Title,
 			Description:     channel.Snippet.Description,
 			ImageUrl:        imageUrl,
